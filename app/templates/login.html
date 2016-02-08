@@ -19,13 +19,14 @@ function set_openid(openid, pr)
 <form action="" method="post" name="login">
     {{form.hidden_tag()}}
     <p>
-        Please enter your OpenID:<br>
-        {{form.openid(size=80)}}<br>
+        Please enter your Login and Password:<br>
+        {{form.login(size=30)}}<br>
+        {{form.password(size=30)}}<br>
         {% for error in form.errors.openid %}
         <span style="color: red;"> [{{error}}]</span>
         {% endfor %}<br>
         |{% for pr in providers %}
-        <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
+        <a href="{{ url_for('index') }}" OnClick="set_openid('{{pr.url}}', '{{pr.name}}');submit();">{{pr.name}}</a> |
         {% endfor %}
     </p>
     <p>{{form.remember_me}} Remember Me</p>
