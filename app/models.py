@@ -1,4 +1,5 @@
 from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 ROLE_USER = 0
 ROLE_ADMIN = 1
@@ -10,6 +11,16 @@ class User(db.Model):
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     password = db.Column(db.String(255))
     posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+
+    def __init__(self, password, **kwargs):
+        password_ = generate_password_hash(password)
+        super(User, self).__init__(password = password_, **kwargs)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def is_authenticated(self):
         return True
