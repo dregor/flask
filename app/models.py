@@ -1,4 +1,5 @@
 from app import db
+from hashlib import md5
 from werkzeug.security import generate_password_hash, check_password_hash
 
 ROLE_USER = 0
@@ -15,6 +16,9 @@ class User(db.Model):
     def __init__(self, password, **kwargs):
         password_ = generate_password_hash(password)
         super(User, self).__init__(password = password_, **kwargs)
+
+    def avatar(self, size):
+        return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&s=' + str(size)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -34,8 +38,12 @@ class User(db.Model):
     def get_id(self):
         return unicode(self.id)
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def __repr__(self):
-        return '<User %r>' % (self.login)
+        return '<User %r>' % (self.nickname)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
