@@ -9,15 +9,19 @@
   <body>
     <table width='100%'>
         <tr>
-            <td width='90%'>
+            <td width='70%'>
                 Meny: <a href="{{ url_for('index') }}">Home</a> 
-            {% if current_user.is_authenticated and current_user.role == 1 %}
+            {% if current_user.is_authenticated and 'admin' in g.roles  %}
                 | <a href="{{ url_for('users') }}">Users</a> 
             {% endif %}
             </td>
-            <td width='10%'>
+            <td style='text-align:right;' width='30%'>
             {% if current_user.is_authenticated %}
                 User: {{ current_user.nickname }}
+                | Roles:  
+                {% for role in g.roles %}
+                {{role}},&ensp;
+                {% endfor %}
                 | <a href="{{ url_for('logout') }}">Logout</a>
             {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
