@@ -1,5 +1,14 @@
 <table>
+    {% for post in posts %}
     <tr valign="top">
         <td><img src="{{post.author.avatar(50)}}"></td><td><i>{{post.author.nickname}} says:</i><br>{{post.body}}</td>
     </tr>
+    {% endfor %}
+    <form action="" method="post" name="post">
+        {{ post_form.hidden_tag() }}
+        <table>
+        <tr><td>{{ post_form.post }} </td></tr>
+        <tr align="right"> <td><input type="submit" value="Send"> </td></tr>
+        </table>
+    </form>
 </table>

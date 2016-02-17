@@ -4,8 +4,18 @@
 <table>
     <tr valign="top">
         <td><img src="{{user.avatar(80)}}"></td>
-        <td><h1>User: {{user.nickname}}</h1></td>
+        <td><h1>User: {{user.nickname}}</h1>
+        <p>{{user.about_me}}</p>
+        <p><i>Last seen on: {{user.last_seen}}</i></p></td>
     </tr>
 </table>
 <hr>
+<h3> My posts: </h3>
+<table>
+    {% for post in user.posts %}
+    <tr valign="top">
+        <td><img src="{{post.author.avatar(50)}}"></td><td><i>{{post.author.nickname}} says:</i><br>{{post.body}}</td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
