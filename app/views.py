@@ -1,9 +1,8 @@
 #-*- coding: utf-8 -*- 
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from flask_restful import Resource, Api
 from app import app, db, lm
-from forms import LoginForm, RegisterForm, PostForm
+from forms import LoginForm, RegisterForm, PostForm, PostViewForm
 from models import User, Role, Post
 
 @app.before_request
@@ -19,26 +18,21 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/index')
 @login_required
 def index():
-    posts = Post.query.filter_by(wall_id=current_user.id)
-    post_form = PostForm()
-    #flash(Post(author=current_user, wall_owner=current_user, body=post_form.post.data))
-
-    if post_form.validate_on_submit():
-        current_user.post_on_the_wall(user=current_user, body=post_form.post.data)
-        return redirect(url_for('index'))
-
-    return render_template('index.html', title='Index', post_form=post_form, posts=posts)
+    return render_template('index.html',
+                           title='Index')
 
 
 @app.route('/users')
 @login_required
 def users():
     user_list = User.query.order_by(User.id)
-    return render_template('users.html', title='Users', users=user_list)
+    return render_template('users.html',
+                           title='Users',
+                           users=user_list)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -52,7 +46,9 @@ def login():
         session['remember_me'] = form.remember_me.data
         return standard_login(form)
 
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html',
+                           title='Sign In',
+                           form=form)
 
 
 def standard_login(form):
@@ -77,7 +73,10 @@ def logout():
 def register():
     form = RegisterForm() 
     if request.method == 'GET':
-        return render_template('register.html', title = 'Register', form = form)
+        return render_template('register.html',
+                               title='Register',
+                               form=form)
+
     user_tmp = User(nickname=form['login'].data,
                     password=form['password'].data,
                     email=form['email'].data,
@@ -89,14 +88,37 @@ def register():
     return redirect(url_for('index'))
 
 
-@app.route('/user/<nickname>')
+@app.route('/user/<nickname>', methods=['GET', 'POST'])
 @login_required
 def user(nickname):
-    user = User.query.filter_by(nickname = nickname).first() 
-    if user is None:
+
+    user_tmp = User.query.filter_by(nickname=nickname).first()
+
+    if user_tmp is None:
         flash('User ' + nickname + ' not found.')
         return redirect(url_for('index'))
-    return render_template('user.html', title='User :' + nickname, user=user)
+
+    posts = Post.query.filter_by(wall_id=user_tmp.id)
+    post_view_form = PostViewForm()
+    post_form = PostForm()
+
+    if post_view_form.validate_on_submit():
+        Post.query.get(post_view_form.post_id.data).delete()
+        flash(Post.query.get(post_view_form.post_id.data))
+        return redirect(request.path)
+
+    if post_form.validate_on_submit():
+        user_tmp.post_on_the_wall(user=current_user,
+                                  body=post_form.post.data)
+        return redirect(request.path)
+
+    return render_template('user.html',
+                           title='User :' + nickname,
+                           user=user_tmp,
+                           post_form=post_form,
+                           post_view_form=post_view_form,
+                           posts=posts
+                           )
 
 
 

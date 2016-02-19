@@ -1,7 +1,9 @@
-from app import db
+from app import app, db, rest
 from datetime import datetime
 from hashlib import md5
+
 from werkzeug.security import generate_password_hash, check_password_hash
+
 
 role_association = db.Table('Role_association',
                             db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
@@ -66,12 +68,17 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % (self.nickname)
 
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     wall_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
     def __repr__(self):
         return '<Post %r>' % (self.body)
@@ -89,3 +96,6 @@ class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     session_hash = db.Column(db.String(120), unique=True)
+
+rest.create_api(User, methods=['GET', 'POST', 'DELETE'], results_per_page=1)
+rest.create_api(Role, methods=['GET', 'POST', 'DELETE'], results_per_page=1)

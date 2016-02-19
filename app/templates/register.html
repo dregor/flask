@@ -7,7 +7,7 @@
     {{form.hidden_tag()}}
     <p>
         <table>
-        {% for entry in form if entry.type != 'CSRFTokenField' %}
+        {% for entry in form if entry.type != 'CSRFTokenField' and entry.type != 'SubmitField' %}
             <tr>
             <td> {{ entry.name }} </td>
             <td> {{ entry }} </td>
@@ -15,7 +15,7 @@
         {% endfor %}
         </table>
     </p>
-    <p><input type="submit" value="Register"></p>
+    {{ form.register() }}
 </form>
 
 {% endblock %}

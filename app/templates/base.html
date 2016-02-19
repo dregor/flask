@@ -10,7 +10,7 @@
     <table width='100%'>
         <tr>
             <td width='70%'>
-                Meny: <a href="{{ url_for('index') }}">Home</a> 
+                Menu: <a href="{{ url_for('index') }}">Home</a>
             {% if current_user.is_authenticated and 'admin' in g.roles  %}
                 | <a href="{{ url_for('users') }}">Users</a> 
             {% endif %}
