@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from models import Role
+from app.models import Role
 from wtforms import StringField, BooleanField, PasswordField, HiddenField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, EqualTo
 

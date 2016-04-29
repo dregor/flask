@@ -11,17 +11,14 @@ Flask-Restless==0.17.0
 Flask-SQLAlchemy==2.1
 Flask-WhooshAlchemy==0.56
 Flask-WTF==0.12
-flup==1.0.2
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
 mimerender==0.5.5
 pbr==1.8.1
-py-bcrypt==0.4
 pycparser==2.14
 python-dateutil==2.4.2
 python-mimeparse==1.5.1
-python-openid==2.2.5
 pytz==2015.7
 six==1.10.0
 speaklater==1.3

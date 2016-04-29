@@ -1,4 +1,4 @@
-from app import app, db, rest
+from app import db, rest
 from datetime import datetime
 from hashlib import md5
 
@@ -97,5 +97,6 @@ class Session(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     session_hash = db.Column(db.String(120), unique=True)
 
-rest.create_api(User, methods=['GET', 'POST', 'DELETE'], results_per_page=1)
-rest.create_api(Role, methods=['GET', 'POST', 'DELETE'], results_per_page=1)
+rest.create_api(User, methods=['GET', 'POST', 'DELETE']) #, results_per_page=1)
+rest.create_api(User, collection_name='user_by_name', primary_key='nickname', methods=['GET', 'POST', 'DELETE'])
+rest.create_api(Role, methods=['GET', 'POST', 'DELETE'])
