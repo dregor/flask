@@ -9,6 +9,11 @@ class PostViewForm(Form):
     delete = SubmitField('delete')
 
 
+class UserDeleteForm(Form):
+    user_id = HiddenField('user_id', [DataRequired()])
+    delete = SubmitField('delete')
+
+
 class PostForm(Form):
     post = TextAreaField('post', [DataRequired()])
     send = SubmitField('Send')

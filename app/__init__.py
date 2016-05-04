@@ -2,7 +2,7 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.restless import APIManager
-import sys, os
+import os
 #from os.path import dirname
 #sys.path.append(dirname(__file__))
 #import views, forms, models
@@ -32,11 +32,10 @@ if not app.debug:
     if not os.path.isfile('log/debug.log'):
         try:
             open('log/debug.log', 'w').close()
-        except OSError, e:
+        except OSError as e:
             print('can\'t create log file')
             print(e)
         else:
             log_to_file()
     else:
         log_to_file()
-

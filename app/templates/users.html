@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<form action="" method="post" name="user_delete_form">
+    {{ user_delete_form.hidden_tag() }}
+</form>
+
 <style>
 td {
     padding: 5px;
@@ -14,6 +19,7 @@ table {
 {% for user in users %}
     <tr valign="top">
         <td> <a href = {{url_for('user', nickname=user.nickname)}} > {{user.nickname}} </a></td>
+        <td> {{user.id}}</td>
         <td> {{user.email}}</td>
         <td> {{user.password}}</td>
         <td> {{user.last_seen}}</td>
@@ -22,7 +28,9 @@ table {
         <td> {{user.is_anonymous()}}</td>
         <td> {{user.is_authenticated()}}</td>
         <td> {{user.all_roles()}}</td>
-    </tr>
+        <td> <img src="/static/x.png" onclick="document.forms.user_delete_form.user_id.value='{{ user.id }}';
+                                               document.forms.user_delete_form.submit();">
+                                               </td> 
 {% endfor %}
 </table>
 {% endblock %}

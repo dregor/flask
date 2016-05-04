@@ -9,7 +9,6 @@ role_association = db.Table('Role_association',
                             db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                             db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
@@ -40,13 +39,13 @@ class User(db.Model):
         return False
 
     def is_active(self):
-        return True 
+        return True
 
     def is_authenticated(self):
-        return True 
+        return True
 
     def avatar(self, size):
-        return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&s=' + str(size)
+        return 'http://www.gravatar.com/avatar/' + md5(self.email.encode('utf-8')).hexdigest() + '?d=mm&s=' + str(size)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -55,7 +54,7 @@ class User(db.Model):
         return check_password_hash(self.password, password)
 
     def get_id(self):
-        return unicode(self.id)
+        return self.id
 
     def see_you(self):
         self.last_seen = datetime.utcnow()
@@ -70,7 +69,7 @@ class User(db.Model):
 
 
 class Post(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -85,7 +84,7 @@ class Post(db.Model):
 
 
 class Role(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(140))
 
     def __repr__(self):
@@ -97,6 +96,6 @@ class Session(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     session_hash = db.Column(db.String(120), unique=True)
 
-rest.create_api(User, methods=['GET', 'POST', 'DELETE']) #, results_per_page=1)
+rest.create_api(User, methods=['GET', 'POST', 'DELETE'])  # , results_per_page=1)
 rest.create_api(User, collection_name='user_by_name', primary_key='nickname', methods=['GET', 'POST', 'DELETE'])
 rest.create_api(Role, methods=['GET', 'POST', 'DELETE'])
