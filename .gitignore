@@ -1,4 +1,4 @@
-.idea 
+.idea/ 
 app.db
 migrations
 flask.sublime-project
