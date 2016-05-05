@@ -3,7 +3,7 @@
   {% if title %}
       <title>{{title}}</title>
   {% elif not title %}
-      <title>Flask-REST</title>
+      <title>Flask</title>
   {% endif %}
   </head>
   <body>
@@ -35,7 +35,7 @@
     {% if messages %}
     <ul>
     {% for message in messages %}
-        <li>{{ message }} </li>
+        <li style="color: blue;">{{ message }} </li>
     {% endfor %}
     </ul>
     {% endif %}

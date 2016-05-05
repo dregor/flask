@@ -81,22 +81,23 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    if request.method == 'GET':
-        return render_template('register.html',
-                               title='Register',
-                               form=form)
-    if User.query.filter_by(nickname=form['login'].data).first() is None:
-        user_tmp = User(nickname=form['login'].data,
-                        password=form['password'].data,
-                        email=form['email'].data)
-        user_tmp.roles.append(Role.query.get(form['role'].data))
-        db.session.add(user_tmp)
-        db.session.commit()
-        flash('User successfully registered')
-    else:
-        flash('User already exist.')
+    if form.validate_on_submit():
+        if User.query.filter_by(nickname=form['login'].data).first() is None:
+            user_tmp = User(nickname=form['login'].data,
+                            password=form['password'].data,
+                            email=form['email'].data)
+            user_tmp.roles.append(Role.query.get(form['role'].data))
+            db.session.add(user_tmp)
+            db.session.commit()
+            flash('User successfully registered')
+            return redirect(url_for('index'))
+        else:
+            flash('User already exist.')
+            return redirect(request.path)
 
-    return redirect(url_for('index'))
+    return render_template('register.html',
+                           title='Register',
+                           form=form)
 
 
 @app.route('/user/<nickname>', methods=['GET', 'POST'])

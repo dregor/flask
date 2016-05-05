@@ -9,6 +9,7 @@ role_association = db.Table('Role_association',
                             db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                             db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
@@ -85,7 +86,7 @@ class Post(db.Model):
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    role_name = db.Column(db.String(140))
+    role_name = db.Column(db.String(140), unique=True)
 
     def __repr__(self):
         return '<Role %r>' % (self.role_name)
@@ -99,3 +100,9 @@ class Session(db.Model):
 rest.create_api(User, methods=['GET', 'POST', 'DELETE'])  # , results_per_page=1)
 rest.create_api(User, collection_name='user_by_name', primary_key='nickname', methods=['GET', 'POST', 'DELETE'])
 rest.create_api(Role, methods=['GET', 'POST', 'DELETE'])
+
+# Default roles :
+if Role.query.first() is None:
+    for item in ['admin','user']:
+        db.session.add(Role(role_name=item))
+        db.session.commit()

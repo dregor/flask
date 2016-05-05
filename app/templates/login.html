@@ -8,9 +8,12 @@
     <p>
         Please enter your Login and Password:<br>
         {{form.login(size=30)}}<br>
+        {% for error in form.login.errors %}
+            <span style="color: red;"> [{{error}}]</span>
+        {% endfor %}<br>
         {{form.password(size=30)}}<br>
-        {% for error in form.errors %}
-        <span style="color: red;"> [{{error}}]</span>
+        {% for error in form.password.errors %}
+            <span style="color: red;"> [{{error}}]</span>
         {% endfor %}<br>
     </p>
     <p>{{form.remember_me}} Remember Me</p>

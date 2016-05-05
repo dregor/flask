@@ -1,4 +1,9 @@
-.idea/* 
+.idea 
+app.db
+migrations
+flask.sublime-project
+flask.sublime-workspace
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -10,7 +15,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-venv/
+venv*/
 env/
 build/
 develop-eggs/
