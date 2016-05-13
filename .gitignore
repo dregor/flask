@@ -1,6 +1,7 @@
 .idea/ 
 app.db
 migrations
+search.db/
 flask.sublime-project
 flask.sublime-workspace
 

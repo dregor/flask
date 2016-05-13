@@ -18,6 +18,11 @@ def email_exist(form, field):
     return exist(User, User.email, field.data)
 
 
+class SearchForm(Form):
+    text = StringField('search', validators=[DataRequired()])
+    find = SubmitField('Find')
+
+
 class PostViewForm(Form):
     post_id = HiddenField('post_id', [DataRequired()])
     delete = SubmitField('delete')
@@ -45,10 +50,10 @@ class RegisterForm(Form):
     email = StringField('email', [DataRequired(), email_exist, Email()])
     password = PasswordField('password', [DataRequired(), EqualTo('password_confirm', message='Passwords must match')])
     password_confirm = PasswordField('password_confirm', [DataRequired()])
-    try:
-        roles = [(str(role.id), role.role_name) for role in Role.query.all()]
-    except:
-        roles = [('1', 'empty')]
-    role = SelectField('role', choices=roles)
+    #try:
+    #   roles = [(str(role.id), role.role_name) for role in Role.query.all()]
+    #except:
+    #    roles = [('1', 'empty')]
+    #role = SelectField('role', choices=roles)
     about_me = TextAreaField('about me')
     register = SubmitField('Register')

@@ -1,6 +1,8 @@
-from app import db, rest
+from app import db, rest, app
 from datetime import datetime
 from hashlib import md5
+# from sqlalchemy.exc import NoSuchTableError
+import flask.ext.whooshalchemy as whooshalchemy
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -70,6 +72,8 @@ class User(db.Model):
 
 
 class Post(db.Model):
+    __searchable__ = ['body']
+
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
@@ -91,6 +95,9 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role %r>' % (self.role_name)
 
+    def all_roles(self):
+        return self.query.all()
+
 
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -101,8 +108,10 @@ rest.create_api(User, methods=['GET', 'POST', 'DELETE'])  # , results_per_page=1
 rest.create_api(User, collection_name='user_by_name', primary_key='nickname', methods=['GET', 'POST', 'DELETE'])
 rest.create_api(Role, methods=['GET', 'POST', 'DELETE'])
 
-# Default roles :
-if Role.query.first() is None:
-    for item in ['admin','user']:
-        db.session.add(Role(role_name=item))
-        db.session.commit()
+#Default roles :
+# if Role.query.first() is None:
+#     for item in ['admin', 'user']:
+#         db.session.add(Role(role_name=item))
+#         db.session.commit()
+
+whooshalchemy.whoosh_index(app, Post)

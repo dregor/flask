@@ -1,33 +1,9 @@
-<form action="" method="post" name="post_view_form">
-    {{ post_view_form.hidden_tag() }}
-</form>
-
-<style type="text/css">
-    #post {
-    width: 100%;
-    height: 60px;
-    }
-</style>
-
-<table width=400px>
-
-    {% for post in posts %}
+    {% block content %}
+    <table>
     <tr valign="top">
         <td><img src="{{post.author.avatar(50)}}"></td>
         <td><i>{{post.author.nickname}} says:</i><br>
             {{post.body}}</td>
-        <td>
-            <img src="/static/x.png" onclick="document.forms.post_view_form.post_id.value='{{ post.id }}';
-                                              document.forms.post_view_form.submit();">
-        </td>
     </tr>
-
-    {% endfor %}
-    <form action="" method="post" name="post">
-        {{ post_form.hidden_tag() }}
-        <table width=400px>
-        <tr><td>{{ post_form.post }} </td></tr>
-        <tr align="right"> <td>{{ post_form.send() }}</td></tr>
-        </table>
-    </form>
-</table>
+    </table>
+    {% endblock %}

@@ -1,0 +1,5 @@
+Hello {{user.nickname}}, you was register:
+
+{{url_for('user', nickname = user.nickname, _external = True)}}
+
+Admin ({{ INFO_EMAIL }})

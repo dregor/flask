@@ -1,12 +1,20 @@
 from flask import Flask
+import logging
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.restless import APIManager
-import os
+from flask.ext.mail import Mail
+import os, sys
 from config import *
+
+sys.path.append(os.path.join(basedir, 'app'))
 
 app = Flask(__name__.split('.')[0])
 app.config.from_object('config')
+
+app.logger.setLevel(logging.INFO)
+
+mail = Mail(app)
 
 db = SQLAlchemy(app)
 
@@ -22,7 +30,6 @@ log_file_name = os.path.join(basedir, 'log/debug.log')
 def log_to_file():
     file_handler = RotatingFileHandler(log_file_name, 'a', 1 * 1024 * 1024, 10)
     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-    app.logger.setLevel(logging.INFO)
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('site startup')
