@@ -35,7 +35,7 @@ def users():
     if request.method == 'POST':
         if user_delete_form.validate_on_submit():
             user_tmp = User.query.get(user_delete_form.user_id.data)
-            flash('User has been deleted' + user_tmp.nickname)
+            flash('User has been deleted' + user_tmp.nickname, 'info')
             user_tmp.delete()
         return redirect(request.path)
     user_list = User.query.order_by(User.id)
@@ -54,6 +54,9 @@ def login():
 
     if form.validate_on_submit():
         session['remember_me'] = form.remember_me.data
+        flash(form.remember_me.data,'info')
+        flash(form.login.data,'info')
+        flash(form.password.data,'info')
         return standard_login(form)
 
     return render_template('login.html',
@@ -64,12 +67,12 @@ def login():
 def standard_login(form):
     user_tmp = User.query.filter_by(nickname=form.login.data).first()
     if user_tmp and user_tmp.check_password(form.password.data):
-        flash('Successful')
+        flash('Successful login.', 'success')
         login_user(user_tmp, remember=form.remember_me.data)
         user_tmp.is_autenticated = True
         db.session.commit()
         return redirect(request.args.get('next') or url_for('index'))
-    flash(' Bad user! ')
+    flash('Login failed!', 'danger')
     return redirect(url_for('login'))
 
 
@@ -91,12 +94,11 @@ def register():
             user_tmp.roles.append(Role.query.filter_by(role_name='user').first())
             db.session.add(user_tmp)
             db.session.commit()
-            flash('User successfully registered')
-            flash(str(send_mail_register(User.query.filter_by(nickname=user_tmp.nickname).first())))
-            User.query.filter_by(nickname=user_tmp.nickname).first().delete()
+            flash('User successfully registered.', 'success')
+            #User.query.filter_by(nickname=user_tmp.nickname).first().delete()
             return redirect(url_for('index'))
         else:
-            flash('User already exist.')
+            flash('User already exist.', 'danger')
             return redirect(request.path)
 
     return render_template('register.html',
@@ -112,7 +114,7 @@ def user(nickname, page=1):
     user_tmp = User.query.filter_by(nickname=nickname).first()
 
     if user_tmp is None:
-        flash('User ' + nickname + ' not found.')
+        flash('User ' + nickname + ' don\'t found.', 'warning')
         return redirect(url_for('index'))
 
     posts = Post.query.filter_by(wall_id=user_tmp.id).paginate(page, POSTS_PER_PAGE, False)
@@ -121,7 +123,7 @@ def user(nickname, page=1):
 
     if post_view_form.validate_on_submit():
         post_tmp = Post.query.get(post_view_form.post_id.data)
-        flash('Post has been deleted' + str(post_tmp))
+        flash('Post has been deleted' + str(post_tmp), 'info')
         post_tmp.delete()
         return redirect(request.path)
 

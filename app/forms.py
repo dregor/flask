@@ -2,6 +2,7 @@ from flask.ext.wtf import Form
 from app.models import Role, User
 from wtforms import StringField, BooleanField, PasswordField, HiddenField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Email
+from app.widgets import ChekBoxTextWidget
 
 
 def exist(table, column, data):
@@ -41,7 +42,7 @@ class PostForm(Form):
 class LoginForm(Form):
     login = StringField('login', [DataRequired()])
     password = PasswordField('password', [DataRequired()])
-    remember_me = BooleanField('remember_me', default=False)
+    remember_me = BooleanField('remember_me', default=False, widget=ChekBoxTextWidget())
     sign_in = SubmitField('Sign In')
 
 

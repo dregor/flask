@@ -4,6 +4,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.restless import APIManager
 from flask.ext.mail import Mail
+from flask.ext.assets import Environment, Bundle
 import os, sys
 from config import *
 
@@ -23,9 +24,29 @@ rest = APIManager(app, session=db.session)
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
+lm.login_message_category = "info"
 
 log_file_name = os.path.join(basedir, 'log/debug.log')
 
+assets = Environment(app)
+
+js = Bundle('js/bootstrap.js',
+            filters='jsmin',
+            output='gen/jsall.js')
+
+css = Bundle('css/bootstrap-theme.css',
+            'css/bootstrap.css',
+            filters='cssmin',
+            output='gen/cssall.css')
+
+css_sige_in = Bundle('css/sigein.css',
+            filters='cssmin',
+            output='gen/sigein.css')
+
+
+assets.register('js', js)
+assets.register('csssigein', css_sige_in)
+assets.register('css', css)
 
 def log_to_file():
     file_handler = RotatingFileHandler(log_file_name, 'a', 1 * 1024 * 1024, 10)

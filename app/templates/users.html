@@ -28,7 +28,7 @@ table {
         <td> {{user.is_anonymous()}}</td>
         <td> {{user.is_authenticated()}}</td>
         <td> {{user.all_roles()}}</td>
-        <td> <img src="/static/x.png" onclick="document.forms.user_delete_form.user_id.value='{{ user.id }}';
+        <td> <img src="/static/img/x.png" onclick="document.forms.user_delete_form.user_id.value='{{ user.id }}';
                                                document.forms.user_delete_form.submit();">
                                                </td> 
 {% endfor %}

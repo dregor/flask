@@ -1,22 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
+ 
+<div class="container">
+<form name="login" class="form-signin" role="form" action="" method="post">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        {{form.hidden_tag()}}
 
-<h1>Sign In</h1>
-<form action="" method="post" name="login">
-    {{form.hidden_tag()}}
-    <p>
-        Please enter your Login and Password:<br>
-        {{form.login(size=30)}}<br>
+        {{form.login(size=30, class="form-control", placeholder="Email address", required="",autofocus="")}}
         {% for error in form.login.errors %}
             <span style="color: red;"> [{{error}}]</span>
-        {% endfor %}<br>
-        {{form.password(size=30)}}<br>
+        {% endfor %}
+
+        {{form.password(size=30, class="form-control", placeholder="Password", required="")}}
         {% for error in form.password.errors %}
             <span style="color: red;"> [{{error}}]</span>
-        {% endfor %}<br>
-    </p>
-    <p>{{form.remember_me}} Remember Me</p>
-    {{ form.sign_in() }}
-</form>
+        {% endfor %}
+
+        <label class="checkbox">
+          {{form.remember_me(text='Remember me')}} 
+        </label>
+
+        {{ form.sign_in(class="btn btn-lg btn-primary btn-block") }}
+      </form>
+</div>
+
+{% assets "csssigein" %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+{% endassets %}
+
 {% endblock %}
