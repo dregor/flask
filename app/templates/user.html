@@ -1,15 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<table>
-    <tr valign="top">
-        <td><img src="{{user.avatar(180)}}"></td>
-        <td><h1>User: {{user.nickname}}</h1>
-        <p>{{user.about_me}}</p>
-        <p><i>Last seen on: {{user.last_seen}}</i></p></td>
-    </tr>
-</table>
-<hr>
+
+{% assets "cssprofile" %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+{% endassets %}
+
+<div class="row">
+    <div class="col-md-6">
+        <table style="border-top: 0px" class="profile">
+                <tbody>
+                        <tr>
+                                <td rowspan="3"><img src="{{user.avatar(180)}}" class="img-thumbnail"></td>
+                                <td> <h1>User: {{user.nickname}}</h1> </td>
+                        </tr>
+                        <tr>
+                                <td> {{user.about_me}} </td>
+                        </tr>
+                        <tr>
+                                <td style="text-align: right; vertical-align: bottom"> <i>Last seen on: {{user.last_seen}}</i> </td>
+                        </tr>
+                </tbody>
+        </table>
+    </div>
+</div>
 <h3>Wall:</h3>
 {% include 'wall.html' %}
 {% endblock %}

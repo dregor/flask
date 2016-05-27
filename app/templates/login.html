@@ -3,30 +3,44 @@
 {% block content %}
  
 <div class="container">
-<form name="login" class="form-signin" role="form" action="" method="post">
-        <h2 class="form-signin-heading">Please sign in</h2>
+<form name="login" class="form-horizontal" role="form" method="POST">
+    <h2 class="form-heading">Please sign in</h2>
+
+    <div class="form-group">
         {{form.hidden_tag()}}
+        <div class="col-sm-3">
+            {{form.login(size=30, class="form-control", placeholder="Login", required="",autofocus="")}}
+            {% for error in form.login.errors %}
+                <span style="color: red;"> [{{error}}]</span>
+            {% endfor %}
+        </div>
+    </div>
 
-        {{form.login(size=30, class="form-control", placeholder="Email address", required="",autofocus="")}}
-        {% for error in form.login.errors %}
-            <span style="color: red;"> [{{error}}]</span>
-        {% endfor %}
-
+    <div class="form-group">
+        <div class="col-sm-3">
         {{form.password(size=30, class="form-control", placeholder="Password", required="")}}
         {% for error in form.password.errors %}
             <span style="color: red;"> [{{error}}]</span>
         {% endfor %}
+        </div>
+    </div>
 
-        <label class="checkbox">
-          {{form.remember_me(text='Remember me')}} 
-        </label>
+    <div class="form-group">
+        <div class="col-sm-3">   
+            <div class="checkbox">
+                <label>
+                {{form.remember_me(text='Remember me',style="margin-left: -20px;")}}
+                </label>
+            </div>
+        </div>
+    </div>
 
-        {{ form.sign_in(class="btn btn-lg btn-primary btn-block") }}
-      </form>
+    <div class="form-group">
+        <div class="col-sm-3">
+            {{ form.sign_in(class="btn btn-primary btn-lg btn-block") }}
+        </div>
+    </div>
+</form>
 </div>
-
-{% assets "csssigein" %}
-        <link href="{{ ASSET_URL }}" rel="stylesheet">
-{% endassets %}
 
 {% endblock %}

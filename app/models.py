@@ -67,6 +67,9 @@ class User(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def have_role(self, role_name):
+        return True if Role.query.filter_by(role_name=role_name).first() in self.roles else False
+
     def __repr__(self):
         return '<User %r>' % (self.nickname)
 
@@ -87,6 +90,8 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post %r>' % (self.body)
 
+    def __str__(self):
+        return '<Post %r>' % (self.id)
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,26 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h1>Register</h1>
-<form action="" method="post" name="Register">
+<div class="container">
+<form action="" method="post" name="Register" class="form-horizontal" role="form">
+    <h2 class="form-heading">Register</h2>
     {{form.hidden_tag()}}
-    <p>
-        <table>
-        {% for entry in form if entry.type != 'CSRFTokenField' and entry.type != 'SubmitField' %}
-            <tr>
-            <td> {{ entry.name }} </td>
-            <td> {{ entry }} </td>
-            <td> 
+    {% for entry in form if entry.type != 'CSRFTokenField' and entry.type != 'SubmitField' %}
+        <div class="form-group">
+            <label for="input_{{entry.name}}"class="col-sm-2 control-label"> {{ entry.name }} </label>
+            <div class="col-sm-4">
+            {{ entry(id="input_"+entry.name, class="form-control",placeholder=entry.name) }} 
+            </div>
+            <p>            
             {% for error in entry.errors %}
-            <span style="color: red;"> {{ error }} </span><br>
+                <span style="color: red;"> {{ error }} </span><br>
             {% endfor %}
-             </td>
-            </tr>
-        {% endfor %}
-        </table>
-    </p>
-    {{ form.register() }}
+            </p>
+        </div>
+    {% endfor %}
+    <div class="form-group">
+        <div class="col-sm-6">
+            {{ form.register(class="btn btn-primary btn-lg btn-block") }}
+        </div>
+    </div>
 </form>
+</div>
 
 {% endblock %}

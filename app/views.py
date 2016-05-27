@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from app.forms import LoginForm, RegisterForm, PostForm, PostViewForm, UserDeleteForm, SearchForm
+from app.forms import LoginForm, RegisterForm, PostForm, PostDeleteForm, UserDeleteForm, SearchForm
 from app.models import User, Role, Post
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 from site_email import send_mail_register
@@ -32,11 +32,20 @@ def index():
 @login_required
 def users():
     user_delete_form = UserDeleteForm()
+
     if request.method == 'POST':
         if user_delete_form.validate_on_submit():
-            user_tmp = User.query.get(user_delete_form.user_id.data)
-            flash('User has been deleted' + user_tmp.nickname, 'info')
-            user_tmp.delete()
+            if current_user.have_role('admin'):
+                user_tmp = User.query.get(user_delete_form.user_id.data)
+                try:
+                    user_tmp.delete()
+                except Exeption as e:
+                    flush('Can\'t delete user error - ' + e, 'danger')
+                else:
+                    flash('User has been deleted ' + user_tmp.nickname, 'info')
+            else:
+                flash('You don\'t have an access to do this', 'danger')
+
         return redirect(request.path)
     user_list = User.query.order_by(User.id)
     return render_template('users.html',
@@ -51,12 +60,8 @@ def login():
         return redirect(url_for('index'))
 
     form = LoginForm()
-
     if form.validate_on_submit():
         session['remember_me'] = form.remember_me.data
-        flash(form.remember_me.data,'info')
-        flash(form.login.data,'info')
-        flash(form.password.data,'info')
         return standard_login(form)
 
     return render_template('login.html',
@@ -95,7 +100,7 @@ def register():
             db.session.add(user_tmp)
             db.session.commit()
             flash('User successfully registered.', 'success')
-            #User.query.filter_by(nickname=user_tmp.nickname).first().delete()
+            # User.query.filter_by(nickname=user_tmp.nickname).first().delete()
             return redirect(url_for('index'))
         else:
             flash('User already exist.', 'danger')
@@ -118,13 +123,20 @@ def user(nickname, page=1):
         return redirect(url_for('index'))
 
     posts = Post.query.filter_by(wall_id=user_tmp.id).paginate(page, POSTS_PER_PAGE, False)
-    post_view_form = PostViewForm()
+    post_delete_form = PostDeleteForm()
     post_form = PostForm()
 
-    if post_view_form.validate_on_submit():
-        post_tmp = Post.query.get(post_view_form.post_id.data)
-        flash('Post has been deleted' + str(post_tmp), 'info')
-        post_tmp.delete()
+    if post_delete_form.validate_on_submit():
+        post_tmp = Post.query.get(post_delete_form.post_id.data)
+        if post_tmp.author == current_user or current_user.have_role('admin'):
+            try:
+                post_tmp.delete()
+            except Exception as e:
+                flash('Can\'t delete post, error - ' + e, 'danger')
+            else:
+                flash('Post has been deleted ' + str(post_tmp), 'info')
+        else:
+            flash('You don\'t have an access to do this', 'danger')
         return redirect(request.path)
 
     if post_form.validate_on_submit():
@@ -136,8 +148,9 @@ def user(nickname, page=1):
                            title='User :' + nickname,
                            user=user_tmp,
                            post_form=post_form,
-                           post_view_form=post_view_form,
-                           posts=posts
+                           post_delete_form=post_delete_form,
+                           posts=posts,
+                           current_page=page
                            )
 
 
@@ -152,5 +165,5 @@ def search():
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
-    results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
-    return render_template('search_results.html', query=query, results=results)
+    posts = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
+    return render_template('search_results.html', query=query, posts=posts)
