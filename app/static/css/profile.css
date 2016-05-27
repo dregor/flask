@@ -1,0 +1,16 @@
+.profile {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+.profile > thead > tr > th,
+.profile > tbody > tr > th,
+.profile > tfoot > tr > th,
+.profile > thead > tr > td,
+.profile > tbody > tr > td,
+.profile > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 0px;
+}

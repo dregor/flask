@@ -15,7 +15,8 @@ table {
     }
 </style>
 
-<table border='1'>
+<table class="table table-striped">
+<tbody>
 {% for user in users %}
     <tr valign="top">
         <td> {{user.id}}</td>
@@ -26,11 +27,11 @@ table {
         <td> {{user.about_me}}</td>
         <td> {{user.is_active()}}</td>
         <td> {{user.is_anonymous()}}</td>
-        <td> {{user.is_authenticated()}}</td>
-        <td> {{user.all_roles()}}</td>
-        <td> <img src="/static/img/x.png" onclick="document.forms.user_delete_form.user_id.value='{{ user.id }}';
-                                               document.forms.user_delete_form.submit();">
-                                               </td> 
+{#         <td> {{user.is_authenticated()}}</td>
+        <td> {{user.all_roles()}}</td> #}
+        <td> <img src="/static/img/x.png" onclick="document.forms.user_delete_form.user_id.value='{{ user.id }}'; document.forms.user_delete_form.submit();"> </td> 
+    </tr>
 {% endfor %}
+</tbody>
 </table>
 {% endblock %}

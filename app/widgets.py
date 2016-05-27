@@ -25,28 +25,3 @@ class ChekBoxTextWidget(InputWithText):
 		if getattr(field, 'checked', field.data):
 			kwargs['checked'] = True
 		return super(ChekBoxTextWidget, self).__call__(field, **kwargs)
-
-# class InlineButtonWidget(object):
-#     html_params = staticmethod(html_params)
-
-#     def __init__(self, input_type='submit', text='Button'):
-#         self.input_type = input_type
-#         self.text = text
-
-#     def __call__(self, field, **kwargs):
-#         kwargs.setdefault('id', field.id)
-#         kwargs.setdefault('type', self.input_type)
-#         if 'value' not in kwargs:
-#             kwargs['value'] = field._value()
-#         return Markup('<button type="submit" %s><span>%s</span></button>' % (self.html_params(name=field.name, **kwargs), field.text))
-
-#     def _value(self):
-#         return self.data if self.data else ''
-
-
-# class InlineButton(Field):
-# 	widget = InlineButtonWidget()
-
-# 	def __init__(self, label=None, validators=None, text='Save', **kwargs):
-# 		super(InlineButton, self).__init__(label, validators, **kwargs)
-# 		self.text = text

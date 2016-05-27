@@ -1,0 +1,32 @@
+    {% macro render_posts(posts, post_delete_form=None) %}
+
+    {% if post_delete_form %}
+    <form action="" method="post" name="post_delete_form">
+        {{ post_delete_form.hidden_tag() }}
+    </form>
+    {% endif %}
+
+    <div width=550px class="row">
+        <div class="col-md-4 ">
+            <table class="table table-striped">
+                <tbody>
+                {% for post in posts %}
+
+                <tr valign="top">
+                    <td> <a href={{url_for('user', nickname=post.author.nickname)}}> <img src="{{post.author.avatar(60)}}"></a></td>
+                    <td><i>{{post.author.nickname}} says:</i><br>
+                        {{post.body}}</td>
+
+                        {% if post_delete_form %}
+                            <td><img src="/static/img/x.png" onclick="document.forms.post_delete_form.post_id.value='{{ post.id }}';
+                                                                    document.forms.post_delete_form.submit();">
+                        {% endif %}
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endmacro %}

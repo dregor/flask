@@ -1,38 +1,27 @@
-<form action="" method="post" name="post_view_form">
-    {{ post_view_form.hidden_tag() }}
-</form>
+{% from 'posts.html' import render_posts %}
+{{ render_posts(posts.items, post_delete_form=post_delete_form) }}
 
-<style type="text/css">
-    #post {
-    width: 100%;
-    height: 60px;
-    }
-</style>
-
-<table width=400px>
-
-    {% for post in posts.items %}
-    <tr valign="top">
-        <td><img src="{{post.author.avatar(50)}}"></td>
-        <td><i>{{post.author.nickname}} says:</i><br>
-            {{post.body}}</td>
-        <td>
-            <img src="/static/img/x.png" onclick="document.forms.post_view_form.post_id.value='{{ post.id }}';
-                                              document.forms.post_view_form.submit();">
-        </td>
-    </tr>
-
-    {% endfor %}
-    <form action="" method="post" name="post">
-        {{ post_form.hidden_tag() }}
-        <table width=400px>
-        <tr><td>{{ post_form.post }} </td></tr>
-        <tr align="right"> <td>{{ post_form.send() }}</td></tr>
-        </table>
-    </form>
-</table>
-{% if posts.has_prev %}<a href="{{ url_for('user', nickname=user.nickname, page=posts.prev_num) }}"> << </a>{% else %} << {% endif %} | 
-    {% for page in posts.iter_pages() %}
-        <a href="{{ url_for('user', nickname=user.nickname, page=page) }}">{{ page }}</a> | 
-    {% endfor %}
-{% if posts.has_next %}<a href="{{ url_for('user', nickname=user.nickname, page=posts.next_num) }}"> >> </a>{% else %} >> {% endif %}
+<div width=550px class="row">
+    <div class="col-md-4">
+        <form action="" role="form" method="post" name="post">
+            {{ post_form.hidden_tag() }}
+            <table class="table table-striped">
+            <tr><td colspan="2">{{ post_form.post(class="form-control", rows="3") }} </td></tr>
+            <tr align="right">
+            <td style="text-align: center; ; vertical-align: middle;">
+            <ul class="pagination">
+            <li {% if not posts.has_prev %} class="disabled" {% endif %}>
+            <a href="{{ url_for('user', nickname=user.nickname, page=posts.prev_num) }}"> &laquo; </a>
+            </li>
+            {% for page in posts.iter_pages() %}
+                <li {% if page == current_page %} class="active" {% endif %} >
+                <a href="{{ url_for('user', nickname=user.nickname, page=page) }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+            <li {% if not posts.has_next %} class="disabled" {% endif %} ><a  href="{{ url_for('user', nickname=user.nickname, page=posts.next_num) }}"> &raquo; </a></li>
+            </td>
+            <td style="text-align: right; vertical-align: middle;">{{ post_form.send(class="form-control") }}</td></tr>
+            </table>
+        </form>
+    </div>
+</div>

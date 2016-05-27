@@ -34,19 +34,19 @@ js = Bundle('js/bootstrap.js',
             filters='jsmin',
             output='gen/jsall.js')
 
-css = Bundle('css/bootstrap-theme.css',
-            'css/bootstrap.css',
+css = Bundle('css/bootstrap.css',
             filters='cssmin',
             output='gen/cssall.css')
 
-css_sige_in = Bundle('css/sigein.css',
+css_profile = Bundle('css/profile.css',
             filters='cssmin',
-            output='gen/sigein.css')
+            output='gen/profile.css')
 
 
 assets.register('js', js)
-assets.register('csssigein', css_sige_in)
 assets.register('css', css)
+assets.register('cssprofile', css_profile)
+
 
 def log_to_file():
     file_handler = RotatingFileHandler(log_file_name, 'a', 1 * 1024 * 1024, 10)

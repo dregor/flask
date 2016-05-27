@@ -24,7 +24,7 @@ class SearchForm(Form):
     find = SubmitField('Find')
 
 
-class PostViewForm(Form):
+class PostDeleteForm(Form):
     post_id = HiddenField('post_id', [DataRequired()])
     delete = SubmitField('delete')
 
