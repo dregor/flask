@@ -1,12 +1,12 @@
 
-<p>Hello {{user.nickname}}, you was register:</p>
+<p>{{ _('Hello %(nickname)s, you was register:',nickname=user.nickname}}</p>
 
 <table>
     <tr valign="top">
         <td><img src="{{user.avatar}}"></td>
         <td>
-            <a href="{{url_for('user', nickname = follower.nickname, _external = True)}}">{{follower.nickname}}</a><br />
-            {{follower.about_me}}
+            <a href="{{url_for('user', nickname = user.nickname, _external = True)}}">{{user.nickname}}</a><br />
+            {{user.nickname.about_me}}
         </td>
     </tr>
 </table>

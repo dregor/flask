@@ -25,3 +25,12 @@ MAIL_PASSWORD = 'xaloo7Do'
 # administrator list
 INFO_EMAIL = 'flask.site@gmail.com'
 ADMINS = ['flask.site@gmail.com']
+
+LANGUAGES = {
+    'en_US': { 'name':'English', 'picture': 'img/USA.png' },
+    'ru_RU': { 'name':'Русский', 'picture': 'img/Russia.png' }
+    }
+
+BABEL_DEFAULT_LOCALE = 'en_US'
+BABEL_DEFAULT_TIMEZONE = 'UTC'
+ASSETS_DEBUG = True 

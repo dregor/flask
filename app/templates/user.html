@@ -12,18 +12,21 @@
                 <tbody>
                         <tr>
                                 <td rowspan="3"><img src="{{user.avatar(180)}}" class="img-thumbnail"></td>
-                                <td> <h1>User: {{user.nickname}}</h1> </td>
+                                <td> <h1>{{ _('User:') }} {{user.nickname}}</h1> </td>
                         </tr>
                         <tr>
                                 <td> {{user.about_me}} </td>
                         </tr>
                         <tr>
-                                <td style="text-align: right; vertical-align: bottom"> <i>Last seen on: {{user.last_seen}}</i> </td>
+                                <td style="text-align: right; vertical-align: bottom"> 
+                                    {% if user.last_seen %}
+                                        <p><em>{{ _('Last seen: %(date)s',date=momentjs(user.last_seen).calendar())}}</em></p>
+                                    {% endif %} 
+                                </td>
                         </tr>
                 </tbody>
         </table>
     </div>
 </div>
-<h3>Wall:</h3>
 {% include 'wall.html' %}
 {% endblock %}

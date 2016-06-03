@@ -5,17 +5,28 @@ from flask.ext.login import LoginManager
 from flask.ext.restless import APIManager
 from flask.ext.mail import Mail
 from flask.ext.assets import Environment, Bundle
+from app.helpers import momentjs, CustomJSONEncoder
+from datetime import datetime
+from flask.ext.babel import Babel, lazy_gettext
 import os, sys
 from config import *
 
 sys.path.append(os.path.join(basedir, 'app'))
 
 app = Flask(__name__.split('.')[0])
+
+app.json_encoder = CustomJSONEncoder
+
 app.config.from_object('config')
+
+app.jinja_env.globals['momentjs'] = momentjs
+app.jinja_env.globals['date_now'] = datetime.utcnow()
 
 app.logger.setLevel(logging.INFO)
 
 mail = Mail(app)
+
+babel = Babel(app)
 
 db = SQLAlchemy(app)
 
@@ -25,13 +36,18 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 lm.login_message_category = "info"
+lm.login_message = lazy_gettext('Please log in to access this page.')
+
 
 log_file_name = os.path.join(basedir, 'log/debug.log')
 
 assets = Environment(app)
 
-js = Bundle('js/bootstrap.js',
-            filters='jsmin',
+js = Bundle('js/moment-with-locales.js',
+            'js/jquery.cookie.js',
+            'js/bootstrap.js',
+            'js/helpers.js',
+#            filters='jsmin',
             output='gen/jsall.js')
 
 css = Bundle('css/bootstrap.css',

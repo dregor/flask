@@ -1,0 +1,152 @@
+# Russian (Russia) translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-06-01 17:24+0300\n"
+"PO-Revision-Date: 2016-06-01 17:20+0300\n"
+"Last-Translator: dregor614 <dregor614@bk.ru>\n"
+"Language: ru_RU\n"
+"Language-Team: ru_RU <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.2.0\n"
+
+#: app/__init__.py:36
+msgid "Please log in to access this page."
+msgstr "Пожалуйста, авторизуйтесь, для получения доступа к данной странице."
+
+#: app/forms.py:11
+#, python-format
+msgid "This %(colname)s is already in use. Please choose another one."
+msgstr "%(colname)s уже используется. Пожалуйста измените значение поля."
+
+#: app/forms.py:22
+msgid "This field is required"
+msgstr "Это поле обязательно для заполнения."
+
+#: app/forms.py:27
+msgid "Find"
+msgstr "Найти"
+
+#: app/forms.py:42
+msgid "Send"
+msgstr "Отправить"
+
+#: app/forms.py:49
+msgid "Sign In"
+msgstr "Вход"
+
+#: app/forms.py:57
+msgid "Passwords must match"
+msgstr "Пароли должны совпадать."
+
+#: app/forms.py:65 app/templates/base.html:56 app/templates/register.html:6
+msgid "Register"
+msgstr "Регистрация"
+
+#: app/views.py:49
+#, python-format
+msgid "Can't delete user error - %(error)s"
+msgstr "Не могу удалить пользователя, ошибка - %(error)s"
+
+#: app/views.py:51
+#, python-format
+msgid "User %(user)s has been deleted"
+msgstr "Пользователь %(user)s был удален"
+
+#: app/views.py:53 app/views.py:145
+msgid "You don't have an access to do this"
+msgstr "У вас не хватает прав доступа."
+
+#: app/views.py:81
+msgid "Successful login."
+msgstr "Успешный вход."
+
+#: app/views.py:86
+msgid "Login failed!"
+msgstr "Неудачная авторизация!"
+
+#: app/views.py:108
+msgid "User successfully registered."
+msgstr "Пользователь успешно зарегистрирован."
+
+#: app/views.py:112
+msgid "User already exist."
+msgstr "Пользователь уже существует"
+
+#: app/views.py:128
+#, python-format
+msgid "User %(user)s don't found."
+msgstr "Пользователь %(user)s не найден"
+
+#: app/views.py:141
+#, python-format
+msgid "Can't delete post, error - %(error)s"
+msgstr "Не могу удалить пост, ошибка - %(error)s"
+
+#: app/views.py:143
+msgid "Post has been deleted"
+msgstr "Пост был удален"
+
+#: app/templates/base.html:36
+msgid "Users"
+msgstr "Пользователи"
+
+#: app/templates/base.html:42
+msgid "Search"
+msgstr "Поиск"
+
+#: app/templates/base.html:49
+msgid "User"
+msgstr "Пользователь"
+
+#: app/templates/base.html:50
+msgid "Logout"
+msgstr "Выход"
+
+#: app/templates/base.html:55 app/templates/login.html:12
+msgid "Login"
+msgstr "Вход"
+
+#: app/templates/base.html:91
+msgid "Roles: "
+msgstr "Роли : "
+
+#: app/templates/index.html:3
+#, python-format
+msgid "Hi, %(nickname)s !"
+msgstr "Привет, %(nickname)s !"
+
+#: app/templates/login.html:7
+msgid "Please sign in"
+msgstr "Пожалуйста авторизуйтесь"
+
+#: app/templates/login.html:21
+msgid "Password"
+msgstr "Пароль"
+
+#: app/templates/login.html:32
+msgid "Remember me"
+msgstr "Запомнить"
+
+#: app/templates/posts.html:17
+msgid "says:"
+msgstr "сказал: "
+
+#: app/templates/user.html:15
+msgid "User:"
+msgstr "Пользователь:"
+
+#: app/templates/user.html:23
+#, python-format
+msgid "Last seen: %(date)s"
+msgstr "Последний визит: %(date)s"
+

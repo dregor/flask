@@ -3,12 +3,43 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from app import app, db, lm
 from app.forms import LoginForm, RegisterForm, PostForm, PostDeleteForm, UserDeleteForm, SearchForm
 from app.models import User, Role, Post
-from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
+from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, LANGUAGES
 from site_email import send_mail_register
+from app import babel
+from flask.ext.babel import gettext
+
+
+@babel.localeselector
+def get_locale(locale=None):
+    return g.locale
+
+
+def after_this_request(f):
+    if not hasattr(g, 'after_request_callbacks'):
+        g.after_request_callbacks = []
+    g.after_request_callbacks.append(f)
+    return f
+
+
+@app.after_request
+def call_after_request_callbacks(response):
+    for callback in getattr(g, 'after_request_callbacks', ()):
+        callback(response)
+    return response
 
 
 @app.before_request
 def before():
+    g.languages = LANGUAGES
+    g.locale = request.cookies.get('locale')
+    if g.locale is None:
+        g.locale = request.accept_languages.best_match(LANGUAGES.keys())
+
+        @after_this_request
+        def remember_language(response):
+            response.set_cookie('locale', g.locale)
+            return response
+
     g.search_form = SearchForm()
     if current_user and current_user.is_authenticated:
         current_user.see_you()
@@ -40,11 +71,11 @@ def users():
                 try:
                     user_tmp.delete()
                 except Exeption as e:
-                    flush('Can\'t delete user error - ' + e, 'danger')
+                    flush(gettext('Can\'t delete user error - %(error)s', error=e), 'danger')
                 else:
-                    flash('User has been deleted ' + user_tmp.nickname, 'info')
+                    flash(gettext('User %(user)s has been deleted', user=user_tmp.nickname), 'info')
             else:
-                flash('You don\'t have an access to do this', 'danger')
+                flash(gettext('You don\'t have an access to do this'), 'danger')
 
         return redirect(request.path)
     user_list = User.query.order_by(User.id)
@@ -72,12 +103,12 @@ def login():
 def standard_login(form):
     user_tmp = User.query.filter_by(nickname=form.login.data).first()
     if user_tmp and user_tmp.check_password(form.password.data):
-        flash('Successful login.', 'success')
+        flash(gettext('Successful login.'), 'success')
         login_user(user_tmp, remember=form.remember_me.data)
         user_tmp.is_autenticated = True
         db.session.commit()
         return redirect(request.args.get('next') or url_for('index'))
-    flash('Login failed!', 'danger')
+    flash(gettext('Login failed!'), 'danger')
     return redirect(url_for('login'))
 
 
@@ -99,11 +130,11 @@ def register():
             user_tmp.roles.append(Role.query.filter_by(role_name='user').first())
             db.session.add(user_tmp)
             db.session.commit()
-            flash('User successfully registered.', 'success')
+            flash(gettext('User successfully registered.'), 'success')
             # User.query.filter_by(nickname=user_tmp.nickname).first().delete()
             return redirect(url_for('index'))
         else:
-            flash('User already exist.', 'danger')
+            flash(gettext('User already exist.'), 'danger')
             return redirect(request.path)
 
     return render_template('register.html',
@@ -119,7 +150,7 @@ def user(nickname, page=1):
     user_tmp = User.query.filter_by(nickname=nickname).first()
 
     if user_tmp is None:
-        flash('User ' + nickname + ' don\'t found.', 'warning')
+        flash(gettext('User %(user)s don\'t found.',user=nickname), 'warning')
         return redirect(url_for('index'))
 
     posts = Post.query.filter_by(wall_id=user_tmp.id).paginate(page, POSTS_PER_PAGE, False)
@@ -132,11 +163,11 @@ def user(nickname, page=1):
             try:
                 post_tmp.delete()
             except Exception as e:
-                flash('Can\'t delete post, error - ' + e, 'danger')
+                flash(gettext('Can\'t delete post, error - %(error)s', error=e), 'danger')
             else:
-                flash('Post has been deleted ' + str(post_tmp), 'info')
+                flash(gettext('Post has been deleted'), 'info')
         else:
-            flash('You don\'t have an access to do this', 'danger')
+            flash(gettext('You don\'t have an access to do this'), 'danger')
         return redirect(request.path)
 
     if post_form.validate_on_submit():
@@ -164,6 +195,6 @@ def search():
 
 @app.route('/search_results/<query>')
 @login_required
-def search_results(query):
+def search_results(query='*'):
     posts = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
     return render_template('search_results.html', query=query, posts=posts)

@@ -4,12 +4,12 @@
  
 <div class="container">
 <form name="login" class="form-horizontal" role="form" method="POST">
-    <h2 class="form-heading">Please sign in</h2>
+    <h2 class="form-heading">{{ _('Please sign in') }}</h2>
 
     <div class="form-group">
         {{form.hidden_tag()}}
         <div class="col-sm-3">
-            {{form.login(size=30, class="form-control", placeholder="Login", required="",autofocus="")}}
+            {{form.login(size=30, class="form-control", placeholder=_("Login"), required="",autofocus="")}}
             {% for error in form.login.errors %}
                 <span style="color: red;"> [{{error}}]</span>
             {% endfor %}
@@ -18,7 +18,7 @@
 
     <div class="form-group">
         <div class="col-sm-3">
-        {{form.password(size=30, class="form-control", placeholder="Password", required="")}}
+        {{form.password(size=30, class="form-control", placeholder=_("Password"), required="")}}
         {% for error in form.password.errors %}
             <span style="color: red;"> [{{error}}]</span>
         {% endfor %}
@@ -29,7 +29,7 @@
         <div class="col-sm-3">   
             <div class="checkbox">
                 <label>
-                {{form.remember_me(text='Remember me',style="margin-left: -20px;")}}
+                {{form.remember_me(text=_('Remember me'),style="margin-left: -20px;")}}
                 </label>
             </div>
         </div>

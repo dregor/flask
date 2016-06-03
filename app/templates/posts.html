@@ -14,7 +14,7 @@
 
                 <tr valign="top">
                     <td> <a href={{url_for('user', nickname=post.author.nickname)}}> <img src="{{post.author.avatar(60)}}"></a></td>
-                    <td><i>{{post.author.nickname}} says:</i><br>
+                    <td><i>{{momentjs(post.timestamp).fromNow()}} {{post.author.nickname}} {{ _('says:') }}</i><br>
                         {{post.body}}</td>
 
                         {% if post_delete_form %}

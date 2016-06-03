@@ -3,7 +3,6 @@ from wtforms.widgets import CheckboxInput
 
 
 class InputWithText(object):
-	html_params = staticmethod(html_params)
 
 	def __init__(self, input_type=None):
 		if input_type is not None:
@@ -15,7 +14,28 @@ class InputWithText(object):
 		kwargs.setdefault('text', field.name)
 		if 'value' not in kwargs:
 			kwargs['value'] = field._value()
-		return HTMLString('<input %s> %s' % (self.html_params(name=field.name, **kwargs), kwargs['text']))
+		return HTMLString('<input %s> %s' % (html_params(name=field.name, **kwargs), kwargs['text']))
+
+
+class SubmitButtonWidget(object):
+
+	def __init__(self, text='Button', glyph='glyphicon-ok'):
+		self.text=text
+		self.glyph=glyph
+
+
+	def __call__(self, field, **kwargs):
+		kwargs.setdefault('id', field.id)
+		kwargs.setdefault('text', self.text)
+		kwargs.setdefault('type', 'submit')
+		kwargs.setdefault('glyph', self.glyph)
+
+		if kwargs['glyph'] != '' :
+			glyphclass = html_params(class_='glyphicon ' + kwargs['glyph'])
+		else:
+			glyphclass = ''
+
+		return HTMLString('<button %s> <span %s> %s </span> </button>' % (html_params(name=field.name, **kwargs), glyphclass, kwargs['text']))
 
 
 class ChekBoxTextWidget(InputWithText):
