@@ -39,7 +39,7 @@ lm.login_message_category = "info"
 lm.login_message = lazy_gettext('Please log in to access this page.')
 
 
-log_file_name = os.path.join(basedir, 'log/debug.log')
+log_file_name = os.path.join(basedir, 'debug.log')
 
 assets = Environment(app)
 
